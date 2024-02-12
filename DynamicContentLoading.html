@@ -1,0 +1,90 @@
+<!-- Dynamic content loading -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Content Loading</title>
+     <!-- Bootstrap CSS  -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Custom CSS for loading indicator */
+        #loadingIndicator {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <div id="content">
+            <!-- Dynamic content will be loaded here -->
+        </div>
+        <div id="loadingIndicator" class="text-center">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+        <div id="errorMessage" class="alert alert-danger mt-3" role="alert" style="display: none;">
+            Error loading content. Please try again later.
+        </div>
+    </div>
+
+    <!-- Bootstrap JavaScript and custom JavaScript for dynamic content loading -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Function to fetch content asynchronously
+        function fetchContent() {
+            // Simulating asynchronous request with setTimeout
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    const content = '<p>This is some dynamically loaded content.</p>';
+                    resolve(content);
+                    // Uncomment below line to simulate error
+                    // reject(new Error('Failed to load content'));
+                }, 2000); // Simulating delay of 2 seconds
+            });
+        }
+
+        // Function to display loading indicator
+        function showLoadingIndicator() {
+            document.getElementById('loadingIndicator').style.display = 'block';
+        }
+
+        // Function to hide loading indicator
+        function hideLoadingIndicator() {
+            document.getElementById('loadingIndicator').style.display = 'none';
+        }
+
+        // Function to display error message
+        function showErrorMessage() {
+            document.getElementById('errorMessage').style.display = 'block';
+        }
+
+        // Function to hide error message
+        function hideErrorMessage() {
+            document.getElementById('errorMessage').style.display = 'none';
+        }
+
+        // Function to load content and update the page
+        async function loadContent() {
+            showLoadingIndicator();
+            hideErrorMessage();
+            try {
+                const content = await fetchContent();
+                document.getElementById('content').innerHTML = content;
+            } catch (error) {
+                console.error(error.message);
+                showErrorMessage();
+            } finally {
+                hideLoadingIndicator();
+            }
+        }
+
+        // Load content when the page is loaded
+        window.onload = function() {
+            loadContent();
+        };
+    </script>
+</body>
+</html>

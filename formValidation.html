@@ -1,0 +1,180 @@
+
+
+<!-- Form Validation -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Validation</title>
+    <style>
+        /* CSS styles for form validation */
+        .error {
+            color: red;
+        }
+        table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+    th, td {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+    }
+    </style>
+</head>
+<body>
+    <form id="myForm">
+        <div>
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username">
+            <span id="usernameError" class="error"></span>
+        </div>
+        <div>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email">
+            <span id="emailError" class="error"></span>
+        </div>
+        <div>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password">
+            <span id="passwordError" class="error"></span>
+        </div>
+        <button type="submit" >Submit</button>
+    </form>
+
+    Creat OTP <span id="otpNumber"></span>    <button onclick="genOTP();">GenerateOTP</button>
+
+    <table id="displayTable">
+        <tr>
+            <th>Username</th>
+            <th>Password</th>
+        </tr>
+    </table>
+
+
+    <script>
+        // Function to check username availability asynchronously
+        async function checkUsernameAvailability(username) {
+            // Simulating asynchronous request with setTimeout
+            return new Promise(resolve => {
+                setTimeout(() => {
+                    const availableUsernames = ['john', 'jane', 'alice'];
+                    resolve(!availableUsernames.includes(username));
+                }, 1000); // Simulating delay of 1 second
+            });
+        }
+
+
+        // Function to validate email format asynchronously
+        async function validateEmail(email) {
+            // Simulating asynchronous request with setTimeout
+            return new Promise(resolve => {
+                setTimeout(() => {
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    resolve(emailRegex.test(email));
+                }, 1000); // Simulating delay of 1 second
+            });
+        }
+
+
+        // Function to display error messages
+        function showError(inputId, message) {
+            const errorElement = document.getElementById(inputId + 'Error');
+            errorElement.textContent = message;
+        }
+
+
+        // Function to clear error messages
+        function clearError(inputId) {
+            const errorElement = document.getElementById(inputId + 'Error');
+            errorElement.textContent = '';
+        }
+
+
+        // Form submission event handler
+        document.getElementById('myForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+
+            const usernameInput = document.getElementById('username');
+            const emailInput = document.getElementById('email');
+            const passwordInput = document.getElementById('password');
+
+
+            // Clear previous error messages
+            clearError('username');
+            clearError('email');
+            clearError('password');
+
+
+            // Check username availability
+            const usernameAvailable = await checkUsernameAvailability(usernameInput.value);
+            if (!usernameAvailable) {
+                showError('username', 'Username is already taken');
+            }
+
+
+            // Validate email format
+            const validEmail = await validateEmail(emailInput.value);
+            if (!validEmail) {
+                showError('email', 'Invalid email format');
+            }
+
+
+            // Additional password validation can be implemented here
+
+
+            // If no errors, submit the form
+            if (usernameAvailable && validEmail) {
+                this.submit();
+            }
+        });
+    </script>
+
+
+<script>
+document.getElementById("myForm").addEventListener("submit", function(event) {
+    event.preventDefault(); // Prevent form submission
+
+
+    // Get username and password values
+    var username = document.getElementById("username").value;
+    var password = document.getElementById("password").value;
+
+
+    // Create new table row
+    var newRow = document.createElement("tr");
+
+
+    // Insert data into table cells
+    newRow.innerHTML = "<td>" + username + "</td><td>" + password + "</td>";
+
+
+    // Append new row to the table
+    document.getElementById("displayTable").appendChild(newRow);
+
+
+    // Clear form fields after submission
+    document.getElementById("myForm").reset();
+});
+</script>
+
+
+
+<!-- for otp generate  -->
+<script>
+    genOTP = () =>{
+
+       document.getElementById('otpNumber').innerHTML =  ( Math.random() * 10000 +1).toFixed();
+
+
+        // 1000  9999           
+    }
+</script>
+</body>
+</html>
+
+

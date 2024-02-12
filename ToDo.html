@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo List</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Custom CSS for todo list */
+        .todo-container {
+            max-width: 600px;
+            margin: auto;
+            margin-top: 50px;
+        }
+        .todo-item {
+            margin-bottom: 10px;
+        }
+        .task-input {
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container todo-container">
+        <h1>Todo List</h1>
+        <div id="todoList">
+            <!-- Todo list items will be added here -->
+        </div>
+        <div class="input-group mb-3">
+            <input type="text" id="taskInput" class="form-control task-input" placeholder="Enter a new task">
+            <button class="btn btn-primary" type="button" id="addTaskBtn">Add Task</button>
+        </div>
+    </div>
+
+    <!-- Bootstrap JavaScript and custom JavaScript for todo list functionality -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Function to retrieve tasks from local storage
+        function getTasks() {
+            const savedTasks = localStorage.getItem('tasks');
+            return savedTasks ? JSON.parse(savedTasks) : [];
+        }
+
+        // Function to save tasks to local storage
+        function saveTasks(tasks) {
+            localStorage.setItem('tasks', JSON.stringify(tasks));
+        }
+
+        // Function to render tasks on the page
+        function renderTasks(tasks) {
+            const todoList = document.getElementById('todoList');
+            todoList.innerHTML = '';
+            tasks.forEach(task => {
+                const todoItem = document.createElement('div');
+                todoItem.className = 'todo-item d-flex justify-content-between align-items-center';
+                todoItem.innerHTML = `
+                    <span>${task}</span>
+                    <button class="btn btn-danger btn-sm delete-task">Delete</button>
+                `;
+                todoList.appendChild(todoItem);
+            });
+        }
+
+        // Function to handle task addition
+        function addTask(task) {
+            const tasks = getTasks();
+            tasks.push(task);
+            saveTasks(tasks);
+            renderTasks(tasks);
+        }
+
+        // Function to handle task deletion
+        function deleteTask(index) {
+            const tasks = getTasks();
+            tasks.splice(index, 1);
+            saveTasks(tasks);
+            renderTasks(tasks);
+        }
+
+        // Event listener for adding a task
+        document.getElementById('addTaskBtn').addEventListener('click', function() {
+            const taskInput = document.getElementById('taskInput');
+            const task = taskInput.value.trim();
+            if (task) {
+                addTask(task);
+                taskInput.value = '';
+            }
+        });
+
+        // Event delegation for deleting a task
+        document.getElementById('todoList').addEventListener('click', function(event) {
+            if (event.target.classList.contains('delete-task')) {
+                const index = Array.from(event.target.parentElement.parentElement.children).indexOf(event.target.parentElement);
+                deleteTask(index);
+            }
+        });
+
+        // Load tasks when the page is loaded
+        window.onload = function() {
+            const tasks = getTasks();
+            renderTasks(tasks);
+        };
+    </script>
+</body>
+</html>

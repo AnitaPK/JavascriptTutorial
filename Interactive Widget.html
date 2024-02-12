@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Widget: Dropdown Menu</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Custom CSS for interactive widget */
+        .dropdown-menu {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .dropdown-item {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>Interactive Widget: Dropdown Menu</h1>
+        <div class="dropdown">
+            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                Select Item
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton" id="dropdownContent">
+                <!-- Dynamic content will be loaded here -->
+            </ul>
+        </div>
+    </div>
+
+    <!-- Bootstrap JavaScript and custom JavaScript for interactive widget functionality -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Function to fetch dynamic content asynchronously
+        function fetchDynamicContent() {
+            // Simulating asynchronous request with setTimeout
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    const items = ['Item 1', 'Item 2', 'Item 3'];
+                    resolve(items);
+                    // Uncomment below line to simulate error
+                    // reject(new Error('Failed to load content'));
+                }, 2000); // Simulating delay of 2 seconds
+            });
+        }
+
+        // Function to display dynamic content in dropdown menu
+        function renderDropdownContent(items) {
+            const dropdownContent = document.getElementById('dropdownContent');
+            dropdownContent.innerHTML = '';
+            items.forEach(item => {
+                const listItem = document.createElement('li');
+                listItem.className = 'dropdown-item';
+                listItem.textContent = item;
+                dropdownContent.appendChild(listItem);
+            });
+        }
+
+        // Function to handle error in fetching dynamic content
+        function handleError(error) {
+            console.error(error.message);
+            const dropdownContent = document.getElementById('dropdownContent');
+            dropdownContent.innerHTML = '<li class="dropdown-item">Error loading content. Please try again later.</li>';
+        }
+
+        // Load dynamic content when the page is loaded
+        window.onload = function() {
+            fetchDynamicContent()
+                .then(items => renderDropdownContent(items))
+                .catch(error => handleError(error));
+        };
+    </script>
+</body>
+</html>
